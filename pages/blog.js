@@ -53,7 +53,7 @@ export default function BlogPage() {
                       <p className="text-gray-600 mb-4">{post.excerpt}</p>
                       <div className="flex items-center justify-between">
                         <span className="text-gray-700">Di {post.author}</span>
-                          <span className="text-[#d2ad40]">→</span>
+                        <span className="text-[#d2ad40]">→</span>
                       </div>
                     </div>
                   </motion.a>
