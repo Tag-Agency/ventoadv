@@ -26,9 +26,9 @@ export default function PortfolioPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {portfolioItems.map((item) => (
-                <Link key={item.id} href={`/portfolio/${item.id}`} passHref>
-                  <motion.div
-                    className="group relative overflow-hidden rounded-xl shadow-lg cursor-pointer bg-white"
+                <Link key={item.id} href={`/portfolio/${item.id}`} passHref legacyBehavior>
+                  <motion.a
+                    className="group relative overflow-hidden rounded-xl shadow-lg cursor-pointer bg-white block"
                     whileHover={{ y: -5 }}
                   >
                     <img 
@@ -41,7 +41,7 @@ export default function PortfolioPage() {
                       <h3 className="text-xl font-bold text-gray-900 mt-2 mb-2">{item.title}</h3>
                       <p className="text-gray-600">{item.description}</p>
                     </div>
-                  </motion.div>
+                  </motion.a>
                 </Link>
               ))}
             </div>

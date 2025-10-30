@@ -27,9 +27,9 @@ export default function BlogPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {blogPosts.map((post) => (
-                <Link key={post.id} href={`/blog/${post.id}`} passHref>
-                  <motion.div
-                    className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer"
+                <Link key={post.id} href={`/blog/${post.id}`} passHref legacyBehavior>
+                  <motion.a
+                    className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer block"
                     whileHover={{ y: -5 }}
                   >
                     <img 
@@ -53,10 +53,11 @@ export default function BlogPage() {
                       <p className="text-gray-600 mb-4">{post.excerpt}</p>
                       <div className="flex items-center justify-between">
                         <span className="text-gray-700">Di {post.author}</span>
-                        <span className="text-[#d2ad40]">→</span>
+                        <span className="text-[#d2ad40]">
+                          <span className="text-[#d2ad40]">→</span>
                       </div>
                     </div>
-                  </motion.div>
+                  </motion.a>
                 </Link>
               ))}
             </div>
