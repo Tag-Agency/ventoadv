@@ -1,5 +1,8 @@
 // Simple WordPress REST API helper
-const API_BASE = process.env.NEXT_PUBLIC_WP_API_URL // e.g. https://yourwp.site/wp-json/wp/v2
+// Prefer env var, but fall back to the project's WP endpoint so deploys don't break if the var is missing
+const API_BASE =
+  process.env.NEXT_PUBLIC_WP_API_URL ||
+  'https://work.tagagency.it/ventoadv/wp-json/wp/v2' // default for this project
 
 async function fetchJSON(endpoint, { nextOptions, params } = {}) {
   if (!API_BASE) return null
