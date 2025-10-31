@@ -1,49 +1,77 @@
  'use client'
 
-import { Play, ChevronRight } from 'lucide-react'
+import { Play, ChevronRight, TrendingUp, Megaphone, Globe, Share2, ShoppingCart, Target } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import UiImage from '@/components/UiImage'
+import { useRef, useState } from 'react'
+import ParticleNetwork from '@/components/ParticleNetwork'
 
 const services = [
   {
     id: 'marketing',
     title: "Marketing",
     description: "Strategie di marketing su misura per raggiungere i tuoi obiettivi commerciali.",
-    image: "https://placehold.co/400x300/d2ad40/ffffff?text=Marketing"
+    image: "https://placehold.co/400x300.png?text=Marketing&bg=d2ad40&fg=ffffff",
+    icon: TrendingUp
   },
   {
     id: 'advertising-branding',
     title: "Advertising & Branding",
     description: "Creazione di campagne pubblicitarie e identità di marca memorabili.",
-    image: "https://placehold.co/400x300/4f4f4f/ffffff?text=Advertising"
+    image: "https://placehold.co/400x300.png?text=Advertising&bg=4f4f4f&fg=ffffff",
+    icon: Megaphone
   },
   {
     id: 'web-web-marketing',
     title: "Web & Web Marketing",
     description: "Siti web ottimizzati con strategie di marketing digitale integrate.",
-    image: "https://placehold.co/400x300/d2ad40/ffffff?text=Web+Marketing"
+    image: "https://placehold.co/400x300.png?text=Web+Marketing&bg=d2ad40&fg=ffffff",
+    icon: Globe
   },
   {
     id: 'social-media-marketing',
     title: "Social Media Marketing",
     description: "Gestione e ottimizzazione dei canali social per aumentare il tuo engagement.",
-    image: "https://placehold.co/400x300/4f4f4f/ffffff?text=Social+Media"
+    image: "https://placehold.co/400x300.png?text=Social+Media&bg=4f4f4f&fg=ffffff",
+    icon: Share2
   },
   {
     id: 'ecommerce',
     title: "Ecommerce",
     description: "Piattaforme e-commerce complete con integrazione di pagamenti e logistica.",
-    image: "https://placehold.co/400x300/d2ad40/ffffff?text=Ecommerce"
+    image: "https://placehold.co/400x300.png?text=Ecommerce&bg=d2ad40&fg=ffffff",
+    icon: ShoppingCart
   },
   {
     id: 'lead-marketing',
     title: "Lead Marketing",
     description: "Strategie mirate per generare e convertire lead di qualità.",
-    image: "https://placehold.co/400x300/4f4f4f/ffffff?text=Lead+Marketing"
+    image: "https://placehold.co/400x300.png?text=Lead+Marketing&bg=4f4f4f&fg=ffffff",
+    icon: Target
   }
 ]
 
 export default function HomePage() {
+  // Interactive gradient blob over services section
+  const servicesRef = useRef(null)
+  const [blobTransform, setBlobTransform] = useState('translate(-50%, -50%)')
+
+  function handleServicesMouseMove(e) {
+    const rect = servicesRef.current?.getBoundingClientRect()
+    if (!rect) return
+    const cx = rect.left + rect.width / 2
+    const cy = rect.top + rect.height / 2
+    const dx = e.clientX - cx
+    const dy = e.clientY - cy
+    const damp = 0.06 // movement sensitivity
+    setBlobTransform(`translate(calc(-50% + ${dx * damp}px), calc(-50% + ${dy * damp}px))`)
+  }
+
+  function handleServicesMouseLeave() {
+    setBlobTransform('translate(-50%, -50%)')
+  }
+
   return (
     <>
       {/* Hero Section with Video */}
@@ -110,34 +138,53 @@ export default function HomePage() {
       </section>
 
       {/* Services Preview */}
-      <section className="py-20 bg-secondary">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section
+        ref={servicesRef}
+        onMouseMove={handleServicesMouseMove}
+        onMouseLeave={handleServicesMouseLeave}
+        className="relative py-20 bg-white overflow-hidden"
+      >
+        {/* Light gray particle network background (full-width) */}
+        <div className="absolute inset-0 z-0">
+          <ParticleNetwork maxParticles={90} />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
               I Nostri Servizi
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Offriamo soluzioni complete per la tua presenza digitale, dalla strategia alla realizzazione.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service) => (
-              <Link href={`/servizi/${service.id}`} key={service.id}>
-                <motion.div
-                  className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
-                  whileHover={{ y: -5 }}
-                >
-                  <img 
-                    src={service.image} 
-                    alt={service.title}
-                    className="w-full h-48 object-cover rounded-lg mb-4"
-                  />
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">{service.title}</h3>
-                  <p className="text-gray-600">{service.description}</p>
-                </motion.div>
-              </Link>
-            ))}
+            {services.map((service) => {
+              const IconComponent = service.icon
+              return (
+                <Link href={`/servizi/${service.id}`} key={service.id}>
+                  <motion.div
+                    className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+                    whileHover={{ y: -5 }}
+                  >
+                    <div className="mb-6 inline-block p-4 bg-primary/10 rounded-lg">
+                      <IconComponent className="w-12 h-12 text-primary" strokeWidth={1.5} />
+                    </div>
+                    <div className="relative w-full h-48 mb-4">
+                      <UiImage
+                        src={service.image}
+                        alt={service.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover rounded-lg"
+                      />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-3">{service.title}</h3>
+                    <p className="text-gray-600">{service.description}</p>
+                  </motion.div>
+                </Link>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -161,11 +208,15 @@ export default function HomePage() {
                   className="group relative overflow-hidden rounded-xl shadow-lg cursor-pointer"
                   whileHover={{ scale: 1.02 }}
                 >
-                  <img 
-                    src={`https://placehold.co/600x400/${index % 2 ? 'd2ad40' : '4f4f4f'}/ffffff?text=Portfolio`}
-                    alt="Portfolio"
-                    className="w-full h-64 object-cover"
-                  />
+                  <div className="relative w-full h-64">
+                    <UiImage
+                      src={`https://placehold.co/600x400.png?text=Portfolio&bg=${index % 2 ? 'd2ad40' : '4f4f4f'}&fg=ffffff`}
+                      alt="Portfolio"
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
+                      className="object-cover"
+                    />
+                  </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
                     <div className="text-white">
                       <h4 className="text-xl font-semibold mb-2">Project Title</h4>

@@ -24,10 +24,10 @@ export default function PortfolioDetail({ params }) {
   const id = Number(params.id)
   const item = portfolioItems.find(p => p.id === id)
 
-  if (!item) return <div className="py-20 bg-white mt-20 max-w-3xl mx-auto px-4">Progetto non trovato</div>
+  if (!item) return <div className="py-20 bg-white max-w-3xl mx-auto px-4">Progetto non trovato</div>
 
   return (
-    <div className="py-20 bg-white mt-20">
+    <div className="py-20 bg-white">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <Link href="/portfolio" className="flex items-center text-primary font-semibold mb-6">
           <ArrowLeft className="w-5 h-5 mr-2" /> Torna al Portfolio

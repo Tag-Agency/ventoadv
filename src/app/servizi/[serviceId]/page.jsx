@@ -57,7 +57,7 @@ export default function ServicePage({ params }) {
   }
 
   return (
-    <div className="py-20 bg-white mt-20">
+    <div className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
