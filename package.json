@@ -1,0 +1,25 @@
+{
+  "name": "vento",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "13.5.6",
+    "react": "^18",
+    "react-dom": "^18",
+    "framer-motion": "^10.16.5",
+    "lucide-react": "^0.293.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.0.1",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "eslint": "^8",
+    "eslint-config-next": "13.5.6"
+  }
+}
