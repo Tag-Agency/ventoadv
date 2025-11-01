@@ -1,10 +1,10 @@
  'use client'
 
 import { Play, ChevronRight, TrendingUp, Megaphone, Globe, Share2, ShoppingCart, Target } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { motion, LazyMotion, domAnimation } from 'framer-motion'
 import Link from 'next/link'
 import UiImage from '@/components/UiImage'
-import { useRef, useState } from 'react'
+import { useRef, useState, useMemo } from 'react'
 import ParticleNetwork from '@/components/ParticleNetwork'
 
 const services = [
@@ -57,7 +57,7 @@ export default function HomePage() {
   const servicesRef = useRef(null)
   const [blobTransform, setBlobTransform] = useState('translate(-50%, -50%)')
 
-  function handleServicesMouseMove(e) {
+  const handleServicesMouseMove = useMemo(() => (e) => {
     const rect = servicesRef.current?.getBoundingClientRect()
     if (!rect) return
     const cx = rect.left + rect.width / 2
@@ -66,14 +66,14 @@ export default function HomePage() {
     const dy = e.clientY - cy
     const damp = 0.06 // movement sensitivity
     setBlobTransform(`translate(calc(-50% + ${dx * damp}px), calc(-50% + ${dy * damp}px))`)
-  }
+  }, [])
 
-  function handleServicesMouseLeave() {
+  const handleServicesMouseLeave = useMemo(() => () => {
     setBlobTransform('translate(-50%, -50%)')
-  }
+  }, [])
 
   return (
-    <>
+    <LazyMotion features={domAnimation}>
       {/* Hero Section with Video */}
       <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Video Background */}
@@ -229,6 +229,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-    </>
+    </LazyMotion>
   )
 }

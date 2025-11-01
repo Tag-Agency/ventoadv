@@ -1,11 +1,11 @@
 
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, ChevronDown } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { motion, LazyMotion, domAnimation } from 'framer-motion'
 
 const services = [
   {
@@ -52,18 +52,20 @@ export default function Navigation() {
     return pathname.startsWith(href)
   }
 
-  const linkClasses = (href) =>
-    `${isActive(href) ? 'text-primary font-semibold' : 'text-white hover:text-primary'} transition-colors`
+  const linkClasses = useCallback((href) =>
+    `${isActive(href) ? 'text-primary font-semibold' : 'text-white hover:text-primary'} transition-colors`,
+    [pathname]
+  )
 
-  const openDropdown = () => {
+  const openDropdown = useCallback(() => {
     if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current)
     setIsServicesDropdownOpen(true)
-  }
+  }, [])
 
-  const scheduleCloseDropdown = (delay = 300) => {
+  const scheduleCloseDropdown = useCallback((delay = 300) => {
     if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current)
     closeTimeoutRef.current = setTimeout(() => setIsServicesDropdownOpen(false), delay)
-  }
+  }, [])
 
   // Close dropdown when clicking outside of the services area (desktop)
   useEffect(() => {
@@ -78,30 +80,34 @@ export default function Navigation() {
   }, [])
 
   return (
-    <header className="fixed top-0 w-full bg-secondary z-50 border-b border-secondary">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          <div className="flex items-center">
-            <Link href="/" className="inline-block group">
-              <img 
-                src="https://www.ventoadv.it/wp-content/uploads/2020/05/VentoADV_LOGO-500-White.png" 
-                alt="VentoADV Logo"
-                className="h-16 w-auto transition-transform duration-200 ease-out group-hover:scale-105"
-              />
-            </Link>
-          </div>
+    <LazyMotion features={domAnimation}>
+      <header className="fixed top-0 w-full bg-secondary z-50 border-b border-secondary">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
+            <div className="flex items-center">
+              <Link href="/" className="inline-block group" prefetch={true}>
+                <img 
+                  src="https://www.ventoadv.it/wp-content/uploads/2020/05/VentoADV_LOGO-500-White.png" 
+                  alt="VentoADV Logo"
+                  className="h-16 w-auto transition-transform duration-200 ease-out group-hover:scale-105"
+                  loading="eager"
+                />
+              </Link>
+            </div>
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
             <Link 
               href="/"
               className={linkClasses('/')}
+              prefetch={true}
             >
               HOME
             </Link>
             <Link 
               href="/chi-siamo"
               className={linkClasses('/chi-siamo')}
+              prefetch={true}
             >
               CHI SIAMO
             </Link>
@@ -123,6 +129,7 @@ export default function Navigation() {
               <Link 
                 href="/servizi"
                 className={`${linkClasses('/servizi').replace('hover:text-primary','')} group-hover:text-primary`}
+                prefetch={true}
               >
                 SERVIZI
               </Link>
@@ -145,6 +152,7 @@ export default function Navigation() {
                       href={`/servizi/${service.id}`}
                       className="block w-full text-left px-4 py-2 text-white hover:bg-primary hover:text-gray-900 transition-colors"
                       onClick={() => setIsServicesDropdownOpen(false)}
+                      prefetch={true}
                     >
                       {service.title}
                     </Link>
@@ -154,12 +162,14 @@ export default function Navigation() {
             <Link 
               href="/portfolio"
               className={linkClasses('/portfolio')}
+              prefetch={true}
             >
               LAVORI
             </Link>
             <Link 
               href="/blog"
               className={linkClasses('/blog')}
+              prefetch={false}
             >
               BLOG
             </Link>
@@ -169,6 +179,7 @@ export default function Navigation() {
           <Link 
             href="/contatti"
             className="hidden md:block bg-primary hover:bg-[#b89638] text-white px-8 py-3 rounded-full font-semibold transition-colors"
+            prefetch={true}
           >
             CONTATTACI
           </Link>
@@ -263,5 +274,6 @@ export default function Navigation() {
         </motion.div>
       )}
     </header>
+    </LazyMotion>
   )
 }

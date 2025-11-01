@@ -19,11 +19,22 @@ async function fetchJSON(endpoint, { nextOptions, params } = {}) {
   const cacheOptions = NO_STORE
     ? { cache: 'no-store' }
     : { next: { revalidate: 60, ...(nextOptions || {}) } }
-  const res = await fetch(url.toString(), { ...baseOptions, ...cacheOptions })
-  if (!res.ok) {
-    throw new Error(`WP fetch failed: ${res.status} ${res.statusText} for ${url.toString()}`)
+  
+  try {
+    const res = await fetch(url.toString(), { 
+      ...baseOptions, 
+      ...cacheOptions,
+      signal: AbortSignal.timeout(10000) // 10 second timeout
+    })
+    if (!res.ok) {
+      console.warn(`WP fetch failed: ${res.status} ${res.statusText} for ${url.toString()}`)
+      return null
+    }
+    return res.json()
+  } catch (error) {
+    console.warn(`WP fetch error for ${url.toString()}:`, error.message)
+    return null
   }
-  return res.json()
 }
 
 function extractFeaturedImage(item) {
