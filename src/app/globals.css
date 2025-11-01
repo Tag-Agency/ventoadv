@@ -1,3 +1,71 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Subtle liquid-like animation for gradient blobs */
+@keyframes blobFloatSlow {
+	0%, 100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+	50% { transform: translate(calc(-50% + 8px), calc(-50% - 6px)) scale(1.03) rotate(1.2deg); }
+}
+
+@keyframes blobFloatFast {
+	0%, 100% { transform: translate(-50%, -50%) scale(1.02) rotate(0deg); }
+	50% { transform: translate(calc(-50% - 6px), calc(-50% + 5px)) scale(1.05) rotate(-1.2deg); }
+}
+
+.animate-blob-slow {
+	animation: blobFloatSlow 9s ease-in-out infinite;
+}
+
+.animate-blob-fast {
+	animation: blobFloatFast 6.5s ease-in-out infinite;
+}
+
+/* Creative gooey blobs animations */
+.goo-blob { 
+	transform-box: fill-box; 
+	transform-origin: center; 
+}
+
+@keyframes gooMove1 {
+	0% { transform: translate(0px, 0px) scale(1) rotate(0deg); }
+	50% { transform: translate(22px, -16px) scale(1.05) rotate(2deg); }
+	100% { transform: translate(-14px, 12px) scale(0.98) rotate(-2deg); }
+}
+@keyframes gooMove2 {
+	0% { transform: translate(0px, 0px) scale(1.02) rotate(0deg); }
+	50% { transform: translate(-18px, 14px) scale(1.06) rotate(-1.5deg); }
+	100% { transform: translate(10px, -10px) scale(1.01) rotate(1deg); }
+}
+@keyframes gooMove3 {
+	0% { transform: translate(0px, 0px) scale(0.98) rotate(0deg); }
+	50% { transform: translate(16px, 18px) scale(1.03) rotate(1.2deg); }
+	100% { transform: translate(-12px, -8px) scale(1) rotate(-1deg); }
+}
+@keyframes gooMove4 {
+	0% { transform: translate(0px, 0px) scale(1); }
+	50% { transform: translate(-12px, 10px) scale(1.04); }
+	100% { transform: translate(8px, -10px) scale(0.99); }
+}
+@keyframes gooMove5 {
+	0% { transform: translate(0px, 0px) scale(1); }
+	50% { transform: translate(10px, 14px) scale(1.05); }
+	100% { transform: translate(-10px, -12px) scale(0.97); }
+}
+
+.animate-goo-1 { animation: gooMove1 18s ease-in-out infinite alternate; }
+.animate-goo-2 { animation: gooMove2 22s ease-in-out infinite alternate; }
+.animate-goo-3 { animation: gooMove3 26s ease-in-out infinite alternate; }
+.animate-goo-4 { animation: gooMove4 20s ease-in-out infinite alternate; }
+.animate-goo-5 { animation: gooMove5 24s ease-in-out infinite alternate; }
+
+@media (prefers-reduced-motion: reduce) {
+	.animate-goo-1, .animate-goo-2, .animate-goo-3, .animate-goo-4, .animate-goo-5,
+	.animate-blob-slow, .animate-blob-fast { animation: none !important; }
+}
+
+	/* Headings: Poppins uppercase globally */
+	h1, h2 {
+		font-family: var(--font-poppins), ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+		text-transform: uppercase;
+	}
