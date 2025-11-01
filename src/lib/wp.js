@@ -3,6 +3,9 @@
 const API_BASE =
   process.env.NEXT_PUBLIC_WP_API_URL ||
   'https://work.tagagency.it/ventoadv/wp-json/wp/v2' // default for this project
+const NO_STORE =
+  String(process.env.NEXT_PUBLIC_NO_STORE || '').toLowerCase() === '1' ||
+  String(process.env.NEXT_PUBLIC_NO_STORE || '').toLowerCase() === 'true'
 
 async function fetchJSON(endpoint, { nextOptions, params } = {}) {
   if (!API_BASE) return null
@@ -12,11 +15,11 @@ async function fetchJSON(endpoint, { nextOptions, params } = {}) {
       if (v !== undefined && v !== null && v !== '') url.searchParams.set(k, String(v))
     })
   }
-  const res = await fetch(url.toString(), {
-    headers: { 'Accept': 'application/json' },
-    // Revalidate every 60s by default for SSG-like behavior
-    next: { revalidate: 60, ...(nextOptions || {}) },
-  })
+  const baseOptions = { headers: { 'Accept': 'application/json' } }
+  const cacheOptions = NO_STORE
+    ? { cache: 'no-store' }
+    : { next: { revalidate: 60, ...(nextOptions || {}) } }
+  const res = await fetch(url.toString(), { ...baseOptions, ...cacheOptions })
   if (!res.ok) {
     throw new Error(`WP fetch failed: ${res.status} ${res.statusText} for ${url.toString()}`)
   }
@@ -112,10 +115,8 @@ export async function getPageBySlug(slug) {
     if (typeof heroImageValue === 'number') {
       try {
         const wpBase = API_BASE.replace('/wp-json/wp/v2', '')
-        const res = await fetch(`${wpBase}/wp-json/wp/v2/media/${heroImageValue}`, {
-          headers: { 'Accept': 'application/json' },
-          next: { revalidate: 60 },
-        })
+        const mediaUrl = `${wpBase}/wp-json/wp/v2/media/${heroImageValue}`
+        const res = await fetch(mediaUrl, NO_STORE ? { headers: { 'Accept': 'application/json' }, cache: 'no-store' } : { headers: { 'Accept': 'application/json' }, next: { revalidate: 60 } })
         if (res.ok) {
           const mediaData = await res.json()
           featuredImage = mediaData?.source_url || mediaData?.guid?.rendered || null
@@ -144,11 +145,7 @@ export async function getPageBySlug(slug) {
     try {
       const wpBase = API_BASE.replace('/wp-json/wp/v2', '')
       const attachmentUrl = `${wpBase}/wp-json/wp/v2/media/${item.featured_media}`
-      
-      const res = await fetch(`${attachmentUrl}?context=view`, {
-        headers: { 'Accept': 'application/json' },
-        next: { revalidate: 60 },
-      })
+      const res = await fetch(`${attachmentUrl}?context=view`, NO_STORE ? { headers: { 'Accept': 'application/json' }, cache: 'no-store' } : { headers: { 'Accept': 'application/json' }, next: { revalidate: 60 } })
       
       if (res.ok) {
         const mediaData = await res.json()

@@ -36,17 +36,31 @@ export default function ParallaxHero({
   const y = useTransform(scrollYProgress, [0, 1], [0, -height * 0.25])
   // Subtle zoom on scroll
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1 + Math.min(Math.max(zoom, 0), 0.3)])
+  const hasImage = typeof src === 'string' && src.length > 0
 
   return (
     <div ref={ref} className="relative w-full overflow-hidden" style={{ height: `${height}px` }}>
       <motion.div className="absolute inset-0 will-change-transform origin-center" style={{ y, scale }}>
-        {kenBurns ? (
-          <motion.div
-            className="absolute inset-0 will-change-transform"
-            initial={{ scale: 1.0, x: '-2%', y: '2%' }}
-            animate={{ scale: kenBurnsScale, x: '2%', y: '-2%' }}
-            transition={{ duration: kenBurnsDuration, ease: 'linear', repeat: Infinity, repeatType: 'reverse' }}
-          >
+        {hasImage ? (
+          kenBurns ? (
+            <motion.div
+              className="absolute inset-0 will-change-transform"
+              initial={{ scale: 1.0, x: '-2%', y: '2%' }}
+              animate={{ scale: kenBurnsScale, x: '2%', y: '-2%' }}
+              transition={{ duration: kenBurnsDuration, ease: 'linear', repeat: Infinity, repeatType: 'reverse' }}
+            >
+              <Image
+                src={src}
+                alt={alt}
+                fill
+                sizes="100vw"
+                className="object-cover"
+                priority
+                placeholder="blur"
+                blurDataURL={shimmerDataURL(1200, 500)}
+              />
+            </motion.div>
+          ) : (
             <Image
               src={src}
               alt={alt}
@@ -57,18 +71,9 @@ export default function ParallaxHero({
               placeholder="blur"
               blurDataURL={shimmerDataURL(1200, 500)}
             />
-          </motion.div>
+          )
         ) : (
-          <Image
-            src={src}
-            alt={alt}
-            fill
-            sizes="100vw"
-            className="object-cover"
-            priority
-            placeholder="blur"
-            blurDataURL={shimmerDataURL(1200, 500)}
-          />
+          <div className="absolute inset-0 bg-secondary/40" />
         )}
       </motion.div>
       <div className={`absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent ${overlayClassName}`} />

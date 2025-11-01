@@ -4,10 +4,12 @@ This project is wired to consume content from a WordPress site via the REST API.
 
 ## Configure WordPress API
 
-Create a `.env.local` in the project root:
+Create a `.env.local` in the project root (or use the provided `.env.example` as a template):
 
 ```
 NEXT_PUBLIC_WP_API_URL=https://your-wordpress-site.com/wp-json/wp/v2
+# Optional: force no-store for all WordPress fetches (useful while debugging cache on Vercel)
+NEXT_PUBLIC_NO_STORE=0
 ```
 
 - Ensure WordPress exposes the REST API and public posts.
@@ -33,6 +35,15 @@ These helpers use `fetch` with `revalidate: 60` by default.
 - If `NEXT_PUBLIC_WP_API_URL` is not set, the blog page falls back to a placeholder post.
 - Dates are formatted using Italian locale (`it-IT`) to avoid hydration issues.
 
-## Deploy
+## Deploy on Vercel
 
-- For Vercel deployments, set `NEXT_PUBLIC_WP_API_URL` in the project Settings → Environment Variables.
+1) In Vercel → Project → Settings → Environment Variables, set:
+  - `NEXT_PUBLIC_WP_API_URL` = your WP endpoint (e.g. `https://work.tagagency.it/ventoadv/wp-json/wp/v2`)
+  - (optional) `NEXT_PUBLIC_NO_STORE` = `1` to bypass cache during debugging
+
+2) Redeploy the project. If vedi ancora la versione cache, puoi:
+  - Forzare un nuovo deploy (commit vuoto)
+  - Impostare temporaneamente `NEXT_PUBLIC_NO_STORE=1`
+
+### ACF media note
+Se un campo ACF immagine restituisce un ID numerico (media ID) e l'endpoint `/wp-json/wp/v2/media/{id}` è protetto (401), imposta il campo ACF con Return Format = `Image URL` (o `Image Array` con proprietà `.url`). Il codice usa direttamente URL/oggetti senza chiamare l'endpoint media.
