@@ -1,7 +1,7 @@
  'use client'
 
 import { Play, ChevronRight, TrendingUp, Megaphone, Globe, Share2, ShoppingCart, Target } from 'lucide-react'
-import { motion, LazyMotion, domAnimation } from 'framer-motion'
+import { motion, LazyMotion, domAnimation, useReducedMotion } from 'framer-motion'
 import Link from 'next/link'
 import UiImage from '@/components/UiImage'
 import { useRef, useState, useMemo } from 'react'
@@ -56,6 +56,7 @@ export default function HomePage() {
   // Interactive gradient blob over services section
   const servicesRef = useRef(null)
   const [blobTransform, setBlobTransform] = useState('translate(-50%, -50%)')
+  const reduceMotion = useReducedMotion()
 
   const handleServicesMouseMove = useMemo(() => (e) => {
     const rect = servicesRef.current?.getBoundingClientRect()
@@ -77,7 +78,7 @@ export default function HomePage() {
       {/* Hero Section with Video */}
       <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Video Background */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 pointer-events-none">
           <video
             src="https://www.ventoadv.it/wp-content/uploads/2020/05/sfondo2.mp4"
             autoPlay
@@ -86,15 +87,16 @@ export default function HomePage() {
             playsInline
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-black/60"></div>
+          <div className="absolute inset-0 bg-black/60 pointer-events-none"></div>
         </div>
 
         {/* Hero Content */}
         <div className="relative z-10 text-center text-white px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            initial={false}
+            animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+            transition={{ duration: reduceMotion ? 0 : 0.8 }}
+            style={{ opacity: 1 }}
           >
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
               Trasformiamo Idee in
