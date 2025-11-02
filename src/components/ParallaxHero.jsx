@@ -37,13 +37,26 @@ export default function ParallaxHero({
   const hasImage = typeof src === 'string' && src.length > 0
 
   return (
-    <div ref={ref} className="relative w-full overflow-hidden" style={{ height: `${height}px` }}>
-      <motion.div className="absolute inset-0 will-change-transform origin-center" style={{ scale }}>
-        {hasImage ? (
-          kenBurns ? (
-            <div
-              className="absolute inset-0 will-change-transform"
-            >
+    <div ref={ref} className="relative w-full overflow-visible" style={{ height: `${height}px` }}>
+      <div className="absolute inset-0 overflow-hidden" style={{ borderRadius: '0 0 48px 48px' }}>
+        <motion.div className="absolute inset-0 will-change-transform origin-center" style={{ scale }}>
+          {hasImage ? (
+            kenBurns ? (
+              <div
+                className="absolute inset-0 will-change-transform"
+              >
+                <Image
+                  src={src}
+                  alt={alt}
+                  fill
+                  sizes="100vw"
+                  className="object-cover"
+                  priority
+                  placeholder="blur"
+                  blurDataURL={shimmerDataURL(1200, 500)}
+                />
+              </div>
+            ) : (
               <Image
                 src={src}
                 alt={alt}
@@ -54,27 +67,25 @@ export default function ParallaxHero({
                 placeholder="blur"
                 blurDataURL={shimmerDataURL(1200, 500)}
               />
-            </div>
+            )
           ) : (
-            <Image
-              src={src}
-              alt={alt}
-              fill
-              sizes="100vw"
-              className="object-cover"
-              priority
-              placeholder="blur"
-              blurDataURL={shimmerDataURL(1200, 500)}
-            />
-          )
-        ) : (
-          <div className="absolute inset-0 bg-secondary/40" />
-        )}
-      </motion.div>
-      <div className={`absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent ${overlayClassName}`} />
-      <div className="absolute inset-0 flex items-center justify-center px-4">
-        {children}
+            <div className="absolute inset-0 bg-secondary/40" />
+          )}
+        </motion.div>
+        <div className={`absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent ${overlayClassName}`} />
+        <div className="absolute inset-0 flex items-center justify-center px-4">
+          {children}
+        </div>
       </div>
+      {/* Elliptical shadow below hero */}
+      <div 
+        className="absolute left-1/2 -translate-x-1/2 w-[90%] h-8 pointer-events-none"
+        style={{ 
+          bottom: '-20px',
+          background: 'radial-gradient(ellipse at center, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.15) 40%, transparent 70%)',
+          filter: 'blur(8px)'
+        }}
+      />
     </div>
   )
 }

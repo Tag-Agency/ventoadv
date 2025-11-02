@@ -158,7 +158,7 @@ export default function ServicesCarousel() {
           <button
             onClick={handlePrev}
             disabled={currentIndex === 0}
-            className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-[60] bg-white rounded-full p-3 shadow-lg transition-all ${
+            className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 bg-white rounded-full p-3 shadow-lg transition-all ${
               currentIndex === 0 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-primary hover:text-white'
             }`}
             aria-label="Previous"
@@ -169,7 +169,7 @@ export default function ServicesCarousel() {
           <button
             onClick={handleNext}
             disabled={currentIndex >= maxIndex}
-            className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-[60] bg-white rounded-full p-3 shadow-lg transition-all ${
+            className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 bg-white rounded-full p-3 shadow-lg transition-all ${
               currentIndex >= maxIndex ? 'opacity-30 cursor-not-allowed' : 'hover:bg-primary hover:text-white'
             }`}
             aria-label="Next"
@@ -190,7 +190,7 @@ export default function ServicesCarousel() {
                   <Link
                     href={`/servizi/${service.id}`}
                     key={service.id}
-                    className="flex-shrink-0 relative z-50"
+                    className="flex-shrink-0 relative z-0"
                     style={{ width: cardWidth > 0 ? `${cardWidth}px` : 'auto' }}
                   >
                     <motion.div

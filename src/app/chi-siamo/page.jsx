@@ -1,6 +1,7 @@
 import { getPageBySlug } from '@/lib/wp'
 import ParallaxHero from '@/components/ParallaxHero'
 import ServicesCarousel from '@/components/ServicesCarousel'
+import GutenbergContent from '@/components/GutenbergContent'
 
 export const revalidate = 60
 
@@ -45,9 +46,8 @@ export default async function ChiSiamo() {
         </div>
       </ParallaxHero>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: page.content }} />
-      </div>
+      {/* Gutenberg Blocks Content */}
+      <GutenbergContent content={page.content} />
 
       <ServicesCarousel />
     </div>
