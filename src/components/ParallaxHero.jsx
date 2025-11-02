@@ -32,22 +32,17 @@ export default function ParallaxHero({
   const ref = useRef(null)
   // Scroll progress from when hero starts to when it leaves top
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] })
-  // Move image slower than scroll for parallax effect
-  const y = useTransform(scrollYProgress, [0, 1], [0, -height * 0.25])
   // Subtle zoom on scroll
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1 + Math.min(Math.max(zoom, 0), 0.3)])
   const hasImage = typeof src === 'string' && src.length > 0
 
   return (
     <div ref={ref} className="relative w-full overflow-hidden" style={{ height: `${height}px` }}>
-      <motion.div className="absolute inset-0 will-change-transform origin-center" style={{ y, scale }}>
+      <motion.div className="absolute inset-0 will-change-transform origin-center" style={{ scale }}>
         {hasImage ? (
           kenBurns ? (
-            <motion.div
+            <div
               className="absolute inset-0 will-change-transform"
-              initial={{ scale: 1.0, x: '-2%', y: '2%' }}
-              animate={{ scale: kenBurnsScale, x: '2%', y: '-2%' }}
-              transition={{ duration: kenBurnsDuration, ease: 'linear', repeat: Infinity, repeatType: 'reverse' }}
             >
               <Image
                 src={src}
@@ -59,7 +54,7 @@ export default function ParallaxHero({
                 placeholder="blur"
                 blurDataURL={shimmerDataURL(1200, 500)}
               />
-            </motion.div>
+            </div>
           ) : (
             <Image
               src={src}
@@ -76,7 +71,7 @@ export default function ParallaxHero({
           <div className="absolute inset-0 bg-secondary/40" />
         )}
       </motion.div>
-      <div className={`absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent ${overlayClassName}`} />
+      <div className={`absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent ${overlayClassName}`} />
       <div className="absolute inset-0 flex items-center justify-center px-4">
         {children}
       </div>

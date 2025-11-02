@@ -1,4 +1,4 @@
- 'use client'
+'use client'
 
 import { Play, ChevronRight, TrendingUp, Megaphone, Globe, Share2, ShoppingCart, Target } from 'lucide-react'
 import { motion, LazyMotion, domAnimation, useReducedMotion } from 'framer-motion'
