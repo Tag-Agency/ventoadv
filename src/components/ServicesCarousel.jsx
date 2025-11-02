@@ -48,12 +48,29 @@ export default function ServicesCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [direction, setDirection] = useState(0)
   const [containerWidth, setContainerWidth] = useState(0)
+  const [slidesPerView, setSlidesPerView] = useState(3)
   const autoPlayRef = useRef(null)
   const containerRef = useRef(null)
 
-  const slidesPerView = 3 // Desktop: 3 cards visible
   const gap = 24 // gap-6 = 1.5rem = 24px
   const maxIndex = Math.max(0, services.length - slidesPerView)
+
+  // Detect screen size and update slidesPerView
+  useEffect(() => {
+    const updateSlidesPerView = () => {
+      if (window.innerWidth < 768) {
+        setSlidesPerView(2) // Mobile: 2 cards
+      } else if (window.innerWidth < 1024) {
+        setSlidesPerView(2) // Tablet: 2 cards
+      } else {
+        setSlidesPerView(3) // Desktop: 3 cards
+      }
+    }
+    
+    updateSlidesPerView()
+    window.addEventListener('resize', updateSlidesPerView)
+    return () => window.removeEventListener('resize', updateSlidesPerView)
+  }, [])
 
   // Calculate container width on mount and resize
   useEffect(() => {
@@ -96,14 +113,17 @@ export default function ServicesCarousel() {
     return () => {
       if (autoPlayRef.current) clearInterval(autoPlayRef.current)
     }
-  }, [maxIndex])
+  }, [maxIndex, slidesPerView])
 
   // Reset auto-play on manual interaction
   const resetAutoPlay = () => {
     if (autoPlayRef.current) clearInterval(autoPlayRef.current)
     autoPlayRef.current = setInterval(() => {
       setDirection(1)
-      setCurrentIndex(prev => (prev >= maxIndex ? 0 : prev + 1))
+      setCurrentIndex(prev => {
+        const newMaxIndex = Math.max(0, services.length - slidesPerView)
+        return prev >= newMaxIndex ? 0 : prev + 1
+      })
     }, 5000)
   }
 
@@ -122,7 +142,7 @@ export default function ServicesCarousel() {
   const slideOffset = -(currentIndex * (cardWidth + gap))
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="pt-12 pb-8 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
@@ -174,7 +194,8 @@ export default function ServicesCarousel() {
                     style={{ width: cardWidth > 0 ? `${cardWidth}px` : 'auto' }}
                   >
                     <motion.div
-                      className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer h-full"
+                      className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer h-full text-center"
+                      style={{ lineHeight: '1.1em' }}
                       whileHover={{ y: -8 }}
                     >
                       <div className="mb-6 inline-block p-4 bg-primary/10 rounded-lg">
