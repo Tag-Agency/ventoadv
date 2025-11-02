@@ -216,39 +216,13 @@ export default function Navigation() {
             >
               CHI SIAMO
             </Link>
-            <div className="relative">
-              <button 
-                onClick={() => setIsServicesDropdownOpen(!isServicesDropdownOpen)}
-                className="flex items-center w-full text-left text-white"
-              >
-                SERVIZI
-                <ChevronDown className="w-4 h-4 ml-1" />
-              </button>
-              <Link 
-                href="/servizi"
-                className={`block w-full text-left pl-4 py-2 ${isActive('/servizi') ? 'text-primary font-semibold' : 'text-white/80 hover:text-primary'} transition-colors`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Tutti i Servizi
-              </Link>
-              {isServicesDropdownOpen && (
-                <div className="ml-4 mt-2 space-y-2">
-                  {services.map((service) => (
-                    <Link
-                      key={service.id}
-                      href={`/servizi/${service.id}`}
-                      className="block w-full text-left pl-4 text-white hover:text-primary transition-colors"
-                      onClick={() => {
-                        setIsServicesDropdownOpen(false)
-                        setIsMenuOpen(false)
-                      }}
-                    >
-                      {service.title}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+            <Link 
+              href="/servizi"
+              className={`block w-full text-left ${isActive('/servizi') ? 'text-primary font-semibold' : 'text-white hover:text-primary'} transition-colors`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              SERVIZI
+            </Link>
             <Link 
               href="/portfolio"
               className={`block w-full text-left ${isActive('/portfolio') ? 'text-primary font-semibold' : 'text-white hover:text-primary'} transition-colors`}
