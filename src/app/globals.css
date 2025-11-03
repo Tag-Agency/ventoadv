@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Default theme variables (can be overridden at runtime) */
+:root {
+	--color-primary: 210 173 64;   /* #d2ad40 mustard */
+	--color-secondary: 79 79 79;   /* #4f4f4f dark gray */
+	--color-white: 255 255 255;    /* #ffffff white */
+}
+
 /* Subtle liquid-like animation for gradient blobs */
 @keyframes blobFloatSlow {
 	0%, 100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }

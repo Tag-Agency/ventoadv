@@ -1,5 +1,6 @@
 import BlogClient2 from '@/components/BlogClient2'
-import { getCategories, getPosts } from '@/lib/wp'
+import ParallaxHero from '@/components/ParallaxHero'
+import { getCategories, getPosts, getPageBySlug } from '@/lib/wp'
 
 const fallbackPosts = [
   {
@@ -17,24 +18,43 @@ const fallbackPosts = [
 export default async function Blog() {
   let posts = []
   let categories = []
+  let page = null
+  
   try {
     posts = await getPosts({ perPage: 12 })
     categories = await getCategories()
+    page = await getPageBySlug('blog')
   } catch (e) {
     posts = fallbackPosts
     categories = []
   }
 
+  const heroImage = page?.image
+  const heroAlt = page?.imageAlt || page?.title || 'Blog'
+
   return (
-    <div className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Blog</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Scopri le ultime notizie, trend e consigli sul mondo del web, marketing digitale e design.
-          </p>
+    <div className="bg-white">
+  <ParallaxHero src={heroImage} alt={heroAlt} height={450}>
+        <div className="text-center">
+          {page?.customTitle && (
+            <h1
+              className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold drop-shadow-md mb-4"
+              dangerouslySetInnerHTML={{ __html: page.customTitle }}
+            />
+          )}
+          {page?.subtitle && (
+            <h2
+              className="text-primary text-xl sm:text-2xl lg:text-3xl font-semibold drop-shadow-md"
+              dangerouslySetInnerHTML={{ __html: page.subtitle }}
+            />
+          )}
         </div>
-  <BlogClient2 posts={posts} categories={categories} />
+      </ParallaxHero>
+
+      <div className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <BlogClient2 posts={posts} categories={categories} />
+        </div>
       </div>
     </div>
   )

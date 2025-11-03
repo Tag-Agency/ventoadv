@@ -8,8 +8,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#d2ad40',
-        secondary: '#4f4f4f',
+        // Use CSS variables so colors can be changed at runtime from ACF
+        primary: 'rgb(var(--color-primary) / <alpha-value>)',
+        secondary: 'rgb(var(--color-secondary) / <alpha-value>)',
+        white: 'rgb(var(--color-white) / <alpha-value>)',
       },
     },
   },

@@ -24,12 +24,12 @@ export default async function ChiSiamo() {
     )
   }
 
-  // Use the image from WordPress if available, otherwise use the known hero image
-  const heroImage = page.image || 'https://work.tagagency.it/ventoadv/wp-content/uploads/2016/07/Sfondo-Vento-ChiSiamo.jpg'
+  const heroImage = page?.image
+  const heroAlt = page?.imageAlt || page?.title || 'Chi Siamo'
 
   return (
     <div className="bg-white">
-      <ParallaxHero src={heroImage} alt={page.title} height={450}>
+        <ParallaxHero src={heroImage} alt={heroAlt} height={450}>
         <div className="text-center">
           {page.customTitle && (
             <h1

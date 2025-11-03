@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { shimmerDataURL } from '@/lib/image'
+import { useState, useCallback } from 'react'
 
 // Site-wide Image with sensible defaults: blur-up placeholder and responsive sizes
 export default function UiImage({
@@ -11,19 +12,30 @@ export default function UiImage({
   width,
   height,
   fill,
+  onLoadingComplete,
   ...rest
 }) {
+  const [loaded, setLoaded] = useState(false)
   const blur = blurDataURL || shimmerDataURL(width || 700, height || 475)
+
+  const handleComplete = useCallback((img) => {
+    setLoaded(true)
+    if (typeof onLoadingComplete === 'function') onLoadingComplete(img)
+  }, [onLoadingComplete])
+
+  const computedClass = `${className || ''} transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`.trim()
+
   return (
     <Image
       alt={alt}
       placeholder={placeholder}
       blurDataURL={blur}
       sizes={sizes}
-      className={className}
+      className={computedClass}
       width={fill ? undefined : width}
       height={fill ? undefined : height}
       fill={fill}
+      onLoadingComplete={handleComplete}
       {...rest}
     />
   )

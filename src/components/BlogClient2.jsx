@@ -2,8 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Calendar, Clock, ArrowRight, Search } from 'lucide-react'
-import Image from 'next/image'
-import { shimmerDataURL } from '@/lib/image'
+import UiImage from '@/components/UiImage'
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import { formatDateIT } from '@/lib/date'
@@ -105,15 +104,13 @@ export default function BlogClient2({ posts = [], categories = [] }) {
             >
               {post.image ? (
                 <div className="relative w-full h-48">
-                  <Image
+                  <UiImage
                     src={post.image}
                     alt={post.title}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover"
                     priority={false}
-                    placeholder="blur"
-                    blurDataURL={shimmerDataURL(700, 300)}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                 </div>

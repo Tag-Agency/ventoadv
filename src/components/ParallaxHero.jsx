@@ -34,7 +34,7 @@ export default function ParallaxHero({
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] })
   // Subtle zoom on scroll
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1 + Math.min(Math.max(zoom, 0), 0.3)])
-  const hasImage = typeof src === 'string' && src.length > 0
+  const hasImage = typeof src === 'string' && (src.startsWith('/') || /^https?:\/\//.test(src))
 
   return (
     <div ref={ref} className="relative w-full overflow-visible" style={{ height: `${height}px` }}>
