@@ -1,6 +1,5 @@
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { shimmerDataURL } from '@/lib/image'
 import ParallaxHero from '@/components/ParallaxHero'
 import BlogCarousel from '@/components/BlogCarousel'

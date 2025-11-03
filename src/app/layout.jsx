@@ -42,6 +42,9 @@ export default async function RootLayout({ children }) {
       <head>
         {/* Preconnect to common WP hosts used for content */}
         <link rel="preconnect" href="https://work.tagagency.it" crossOrigin="" />
+        <link rel="preconnect" href="https://www.ventoadv.it" crossOrigin="" />
+        <link rel="dns-prefetch" href="//work.tagagency.it" />
+        <link rel="dns-prefetch" href="//www.ventoadv.it" />
       </head>
       <body className={`${inter.className} ${poppins.variable}`} style={cssVars}>
         <Navigation />

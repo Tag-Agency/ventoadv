@@ -12,6 +12,7 @@ export default function UiImage({
   width,
   height,
   fill,
+  quality = 75,
   onLoadingComplete,
   ...rest
 }) {
@@ -35,6 +36,7 @@ export default function UiImage({
       width={fill ? undefined : width}
       height={fill ? undefined : height}
       fill={fill}
+      quality={quality}
       onLoadingComplete={handleComplete}
       {...rest}
     />

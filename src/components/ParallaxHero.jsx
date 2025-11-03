@@ -52,6 +52,7 @@ export default function ParallaxHero({
                   sizes="100vw"
                   className="object-cover"
                   priority
+                  quality={75}
                   placeholder="blur"
                   blurDataURL={shimmerDataURL(1200, 500)}
                 />
@@ -64,6 +65,7 @@ export default function ParallaxHero({
                 sizes="100vw"
                 className="object-cover"
                 priority
+                quality={75}
                 placeholder="blur"
                 blurDataURL={shimmerDataURL(1200, 500)}
               />
