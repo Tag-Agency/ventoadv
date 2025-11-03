@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { motion, LazyMotion, domAnimation } from 'framer-motion'
 
@@ -43,9 +43,11 @@ const services = [
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const servicesRef = useRef(null)
   const closeTimeoutRef = useRef(null)
   const pathname = usePathname()
+  const router = useRouter()
 
   const isActive = (href) => {
     if (href === '/') return pathname === '/'
@@ -67,6 +69,13 @@ export default function Navigation() {
     closeTimeoutRef.current = setTimeout(() => setIsServicesDropdownOpen(false), delay)
   }, [])
 
+  const handleLinkClick = useCallback((e, href) => {
+    if (pathname !== href) {
+      setIsLoading(true)
+      // The loading will be stopped by the pathname useEffect
+    }
+  }, [pathname])
+
   // Close dropdown when clicking outside of the services area (desktop)
   useEffect(() => {
     const onDocMouseDown = (e) => {
@@ -79,9 +88,32 @@ export default function Navigation() {
     return () => document.removeEventListener('mousedown', onDocMouseDown)
   }, [])
 
+  // Loading indicator on route changes
+  useEffect(() => {
+    const handleStart = () => setIsLoading(true)
+    const handleComplete = () => setIsLoading(false)
+
+    // Listen to pathname changes
+    handleComplete() // Reset loading state when pathname changes
+    
+    return () => {
+      handleComplete()
+    }
+  }, [pathname])
+
   return (
     <LazyMotion features={domAnimation}>
-      <header className="fixed top-0 w-full bg-secondary z-50 border-b border-secondary shadow-md">
+      <header className="fixed top-0 w-full z-50 border-b shadow-md" style={{ backgroundColor: '#333333', borderColor: '#333333' }}>
+        {/* Loading bar */}
+        {isLoading && (
+          <motion.div
+            className="absolute top-0 left-0 h-1 bg-primary"
+            initial={{ width: '0%' }}
+            animate={{ width: '100%' }}
+            transition={{ duration: 0.5, ease: 'easeInOut' }}
+            style={{ zIndex: 60 }}
+          />
+        )}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Mobile Bar: burger left, logo center, contact right */}
           <div className="md:hidden h-16 flex items-center">
@@ -134,6 +166,7 @@ export default function Navigation() {
               href="/"
               className={linkClasses('/')}
               prefetch={true}
+              onClick={(e) => handleLinkClick(e, '/')}
             >
               HOME
             </Link>
@@ -141,6 +174,7 @@ export default function Navigation() {
               href="/chi-siamo"
               className={linkClasses('/chi-siamo')}
               prefetch={true}
+              onClick={(e) => handleLinkClick(e, '/chi-siamo')}
             >
               CHI SIAMO
             </Link>
@@ -163,6 +197,7 @@ export default function Navigation() {
                 href="/servizi"
                 className={`${linkClasses('/servizi').replace('hover:text-primary','')} group-hover:text-primary`}
                 prefetch={true}
+                onClick={(e) => handleLinkClick(e, '/servizi')}
               >
                 SERVIZI
               </Link>
@@ -175,7 +210,8 @@ export default function Navigation() {
                     display: isServicesDropdownOpen ? 'block' : 'none'
                   }}
                   transition={{ duration: 0.2 }}
-                  className="absolute left-0 top-full mt-2 w-64 bg-secondary rounded-lg shadow-lg border border-secondary z-50"
+                  className="absolute left-0 top-full mt-2 w-64 rounded-lg shadow-lg border z-50"
+                  style={{ backgroundColor: '#555555', borderColor: '#555555' }}
                   onMouseEnter={openDropdown}
                   onMouseLeave={() => scheduleCloseDropdown()}
                 >
@@ -184,7 +220,10 @@ export default function Navigation() {
                       key={service.id}
                       href={`/servizi/${service.id}`}
                       className="block w-full text-left px-4 py-2 text-white hover:bg-primary hover:text-gray-900 transition-colors"
-                      onClick={() => setIsServicesDropdownOpen(false)}
+                      onClick={(e) => { 
+                        setIsServicesDropdownOpen(false)
+                        handleLinkClick(e, `/servizi/${service.id}`)
+                      }}
                       prefetch={true}
                     >
                       {service.title}
@@ -196,6 +235,7 @@ export default function Navigation() {
               href="/portfolio"
               className={linkClasses('/portfolio')}
               prefetch={true}
+              onClick={(e) => handleLinkClick(e, '/portfolio')}
             >
               LAVORI
             </Link>
@@ -203,6 +243,7 @@ export default function Navigation() {
               href="/blog"
               className={linkClasses('/blog')}
               prefetch={false}
+              onClick={(e) => handleLinkClick(e, '/blog')}
             >
               BLOG
             </Link>
@@ -212,6 +253,7 @@ export default function Navigation() {
           <Link 
             href="/contatti"
             className="hidden md:block bg-primary hover:bg-[#b89638] text-white px-8 py-3 rounded-full font-semibold transition-colors"
+            onClick={(e) => handleLinkClick(e, '/contatti')}
             prefetch={true}
           >
             CONTATTACI
@@ -224,47 +266,53 @@ export default function Navigation() {
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="md:hidden bg-secondary border-t border-secondary"
+          className="md:hidden border-t"
+          style={{ backgroundColor: '#555555', borderColor: '#555555' }}
         >
-          <div className="px-4 py-4 space-y-4">
+          <div className="px-4 py-4">
             <Link 
               href="/"
-              className={`block w-full text-left ${isActive('/') ? 'text-primary font-semibold' : 'text-white hover:text-primary'} transition-colors`}
+              className={`block w-full text-left py-3 ${isActive('/') ? 'text-primary font-semibold' : 'text-white hover:text-primary'} transition-colors`}
               onClick={() => setIsMenuOpen(false)}
             >
               HOME
             </Link>
+            <div className="border-t" style={{ borderColor: '#999999' }}></div>
             <Link 
               href="/chi-siamo"
-              className={`block w-full text-left ${isActive('/chi-siamo') ? 'text-primary font-semibold' : 'text-white hover:text-primary'} transition-colors`}
+              className={`block w-full text-left py-3 ${isActive('/chi-siamo') ? 'text-primary font-semibold' : 'text-white hover:text-primary'} transition-colors`}
               onClick={() => setIsMenuOpen(false)}
             >
               CHI SIAMO
             </Link>
+            <div className="border-t" style={{ borderColor: '#999999' }}></div>
             <Link 
               href="/servizi"
-              className={`block w-full text-left ${isActive('/servizi') ? 'text-primary font-semibold' : 'text-white hover:text-primary'} transition-colors`}
+              className={`block w-full text-left py-3 ${isActive('/servizi') ? 'text-primary font-semibold' : 'text-white hover:text-primary'} transition-colors`}
               onClick={() => setIsMenuOpen(false)}
             >
               SERVIZI
             </Link>
+            <div className="border-t" style={{ borderColor: '#999999' }}></div>
             <Link 
               href="/portfolio"
-              className={`block w-full text-left ${isActive('/portfolio') ? 'text-primary font-semibold' : 'text-white hover:text-primary'} transition-colors`}
+              className={`block w-full text-left py-3 ${isActive('/portfolio') ? 'text-primary font-semibold' : 'text-white hover:text-primary'} transition-colors`}
               onClick={() => setIsMenuOpen(false)}
             >
               LAVORI
             </Link>
+            <div className="border-t" style={{ borderColor: '#999999' }}></div>
             <Link 
               href="/blog"
-              className={`block w-full text-left ${isActive('/blog') ? 'text-primary font-semibold' : 'text-white hover:text-primary'} transition-colors`}
+              className={`block w-full text-left py-3 ${isActive('/blog') ? 'text-primary font-semibold' : 'text-white hover:text-primary'} transition-colors`}
               onClick={() => setIsMenuOpen(false)}
             >
               BLOG
             </Link>
+            <div className="border-t" style={{ borderColor: '#999999' }}></div>
             <Link 
               href="/contatti"
-              className={`block w-full text-left ${isActive('/contatti') ? 'text-primary font-semibold' : 'text-white hover:text-primary'} transition-colors`}
+              className={`block w-full text-left py-3 ${isActive('/contatti') ? 'text-primary font-semibold' : 'text-white hover:text-primary'} transition-colors`}
               onClick={() => setIsMenuOpen(false)}
             >
               CONTATTACI

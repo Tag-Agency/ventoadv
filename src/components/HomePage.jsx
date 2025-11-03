@@ -76,9 +76,9 @@ export default function HomePage() {
   return (
     <LazyMotion features={domAnimation}>
       {/* Hero Section with Video */}
-      <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ borderRadius: '0 0 48px 48px' }}>
         {/* Video Background */}
-        <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 pointer-events-none" style={{ borderRadius: '0 0 48px 48px', overflow: 'hidden' }}>
           <video
             src="https://www.ventoadv.it/wp-content/uploads/2020/05/sfondo2.mp4"
             autoPlay
@@ -137,14 +137,44 @@ export default function HomePage() {
             </div>
           </motion.div>
         </div>
+        
+        {/* Scroll down anchor link */}
+        <motion.a
+          href="#services"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 text-white hover:text-primary transition-colors cursor-pointer"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.8 }}
+          whileHover={{ y: 5 }}
+        >
+          <span className="text-sm font-medium">Scorri</span>
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <ChevronRight className="w-6 h-6 rotate-90" />
+          </motion.div>
+        </motion.a>
+        
+        {/* Elliptical shadow below hero */}
+        <div 
+          className="absolute left-1/2 -translate-x-1/2 w-[90%] h-8 pointer-events-none"
+          style={{ 
+            bottom: '-20px',
+            background: 'radial-gradient(ellipse at center, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.15) 40%, transparent 70%)',
+            filter: 'blur(8px)',
+            zIndex: 20
+          }}
+        />
       </section>
 
       {/* Services Preview */}
       <section
+        id="services"
         ref={servicesRef}
         onMouseMove={handleServicesMouseMove}
         onMouseLeave={handleServicesMouseLeave}
-        className="relative py-20 bg-white overflow-hidden"
+        className="relative py-28 bg-white overflow-hidden"
       >
         {/* Light gray particle network background (full-width) */}
         <div className="absolute inset-0 z-0">
