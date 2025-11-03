@@ -37,7 +37,12 @@ export default function ParallaxHero({
   const hasImage = typeof src === 'string' && (src.startsWith('/') || /^https?:\/\//.test(src))
 
   return (
-    <div ref={ref} className="relative w-full overflow-visible" style={{ height: `${height}px` }}>
+    <div ref={ref} className="parallax-hero relative w-full overflow-visible" style={{ height: 'var(--hero-h)', '--hero-h': `${height}px` }}>
+      <style jsx>{`
+        @media (max-width: 768px) {
+          .parallax-hero { height: calc(var(--hero-h) * 0.6); }
+        }
+      `}</style>
       <div className="absolute inset-0 overflow-hidden" style={{ borderRadius: '0 0 48px 48px' }}>
         <motion.div className="absolute inset-0 will-change-transform origin-center" style={{ scale }}>
           {hasImage ? (

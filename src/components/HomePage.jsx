@@ -108,14 +108,14 @@ export default function HomePage() {
               Web agency specializzata in soluzioni digitali innovative per aziende che vogliono 
               distinguersi nel mondo online.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-row flex-wrap gap-3 justify-center">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <Link 
                   href="/contatti"
-                  className="inline-flex items-center bg-primary hover:bg-[#b89638] text-white px-8 py-4 rounded-lg text-lg font-semibold gap-2 transition-colors"
+                  className="inline-flex items-center bg-primary hover:bg-[#b89638] text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg font-semibold gap-2 transition-colors whitespace-nowrap"
                 >
                   <Play className="w-5 h-5" />
                   Inizia Progetto
@@ -128,7 +128,7 @@ export default function HomePage() {
               >
                 <Link 
                   href="/portfolio"
-                  className="inline-flex items-center border-2 border-white text-white hover:bg-white hover:text-gray-900 px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
+                  className="inline-flex items-center border-2 border-white text-white hover:bg-white hover:text-gray-900 px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg font-semibold transition-colors whitespace-nowrap"
                 >
                   Scopri Portfolio
                   <ChevronRight className="w-5 h-5 ml-2" />

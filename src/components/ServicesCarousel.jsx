@@ -49,6 +49,7 @@ export default function ServicesCarousel() {
   const [direction, setDirection] = useState(0)
   const [containerWidth, setContainerWidth] = useState(0)
   const [slidesPerView, setSlidesPerView] = useState(3)
+  const [isMobile, setIsMobile] = useState(false)
   const autoPlayRef = useRef(null)
   const containerRef = useRef(null)
 
@@ -58,8 +59,10 @@ export default function ServicesCarousel() {
   // Detect screen size and update slidesPerView
   useEffect(() => {
     const updateSlidesPerView = () => {
-      if (window.innerWidth < 768) {
-        setSlidesPerView(2) // Mobile: 2 cards
+      const mobile = window.innerWidth < 768
+      setIsMobile(mobile)
+      if (mobile) {
+        setSlidesPerView(1) // Mobile: 1 card at a time
       } else if (window.innerWidth < 1024) {
         setSlidesPerView(2) // Tablet: 2 cards
       } else {
@@ -178,7 +181,7 @@ export default function ServicesCarousel() {
           </button>
 
           {/* Carousel Container */}
-          <div ref={containerRef} className="overflow-x-hidden overflow-y-visible py-8">
+          <div ref={containerRef} className="overflow-x-hidden overflow-y-visible py-8 mx-auto" style={{ maxWidth: isMobile ? '90%' : '100%' }}>
             <motion.div
               className="flex gap-6"
               animate={{ x: slideOffset }}

@@ -48,10 +48,12 @@ export default async function BlogPost({ params }) {
     <div className="bg-white">
       {post.image && (
         <ParallaxHero src={post.image} alt={post.title} height={350}>
-          <h1
-            className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold text-center drop-shadow-md"
-            dangerouslySetInnerHTML={{ __html: post.title }}
-          />
+          <div className="max-w-[60%] mx-auto">
+            <h1
+              className="text-white text-4xl sm:text-5xl lg:text-5xl font-bold text-center drop-shadow-md"
+              dangerouslySetInnerHTML={{ __html: post.title }}
+            />
+          </div>
         </ParallaxHero>
       )}
 

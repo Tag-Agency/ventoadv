@@ -48,7 +48,7 @@ export default async function RootLayout({ children }) {
       </head>
       <body className={`${inter.className} ${poppins.variable}`} style={cssVars}>
         <Navigation />
-        <main className="pt-20">{/* reserve space for fixed header */}
+        <main className="pt-0">{/* header overlay: no extra top padding */}
           {children}
         </main>
         <Footer />

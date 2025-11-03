@@ -81,9 +81,42 @@ export default function Navigation() {
 
   return (
     <LazyMotion features={domAnimation}>
-      <header className="fixed top-0 w-full bg-secondary z-50 border-b border-secondary">
+      <header className="fixed top-0 w-full bg-secondary z-50 border-b border-secondary shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
+          {/* Mobile Bar: burger left, logo center, contact right */}
+          <div className="md:hidden h-16 flex items-center">
+            <div className="w-1/3 flex items-center">
+              <button 
+                aria-label="Apri menù"
+                className="inline-flex items-center justify-start"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                {isMenuOpen ? <X className="w-7 h-7 text-white" /> : <Menu className="w-7 h-7 text-white" />}
+              </button>
+            </div>
+            <div className="w-1/3 flex justify-center">
+              <Link href="/" className="inline-block group" prefetch={true}>
+                <img 
+                  src="https://www.ventoadv.it/wp-content/uploads/2020/05/VentoADV_LOGO-500-White.png" 
+                  alt="VentoADV Logo"
+                  className="h-14 w-auto transition-transform duration-200 ease-out group-hover:scale-105"
+                  loading="eager"
+                />
+              </Link>
+            </div>
+            <div className="w-1/3 flex justify-end">
+              <Link 
+                href="/contatti"
+                prefetch={true}
+                className="bg-primary hover:bg-[#b89638] text-white px-4 py-2 rounded-full font-semibold text-sm transition-colors"
+              >
+                CONTATTACI
+              </Link>
+            </div>
+          </div>
+
+          {/* Desktop Bar */}
+          <div className="hidden md:flex justify-between items-center h-20">
             <div className="flex items-center">
               <Link href="/" className="inline-block group" prefetch={true}>
                 <img 
@@ -142,7 +175,7 @@ export default function Navigation() {
                     display: isServicesDropdownOpen ? 'block' : 'none'
                   }}
                   transition={{ duration: 0.2 }}
-                  className="absolute left-0 top-full mt-2 w-64 bg-secondary rounded-lg shadow-lg border border-primary z-50"
+                  className="absolute left-0 top-full mt-2 w-64 bg-secondary rounded-lg shadow-lg border border-secondary z-50"
                   onMouseEnter={openDropdown}
                   onMouseLeave={() => scheduleCloseDropdown()}
                 >
@@ -175,7 +208,7 @@ export default function Navigation() {
             </Link>
           </nav>
 
-          {/* Contact Button */}
+          {/* Desktop Contact Button */}
           <Link 
             href="/contatti"
             className="hidden md:block bg-primary hover:bg-[#b89638] text-white px-8 py-3 rounded-full font-semibold transition-colors"
@@ -183,23 +216,15 @@ export default function Navigation() {
           >
             CONTATTACI
           </Link>
-
-          {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
-          </button>
+          </div>
         </div>
-      </div>
 
       {/* Mobile Navigation */}
       {isMenuOpen && (
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="md:hidden bg-secondary border-t border-primary"
+          className="md:hidden bg-secondary border-t border-secondary"
         >
           <div className="px-4 py-4 space-y-4">
             <Link 

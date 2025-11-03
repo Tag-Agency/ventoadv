@@ -30,10 +30,10 @@ export default async function ChiSiamo() {
   return (
     <div className="bg-white">
         <ParallaxHero src={heroImage} alt={heroAlt} height={450}>
-        <div className="text-center">
+        <div className="text-center max-w-[60%] mx-auto">
           {page.customTitle && (
             <h1
-              className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold drop-shadow-md mb-4"
+              className="text-white text-4xl sm:text-5xl lg:text-5xl font-bold drop-shadow-md mb-4"
               dangerouslySetInnerHTML={{ __html: page.customTitle }}
             />
           )}
@@ -46,8 +46,8 @@ export default async function ChiSiamo() {
         </div>
       </ParallaxHero>
 
-      {/* Gutenberg Blocks Content */}
-      <GutenbergContent content={page.content} />
+  {/* Gutenberg Blocks Content (compact spacing on this page) */}
+  <GutenbergContent content={page.content} compact={true} className="py-10" />
 
       <ServicesCarousel />
     </div>
