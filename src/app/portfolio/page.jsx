@@ -43,9 +43,20 @@ export default function Portfolio() {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
   const [page, setPage] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    getPageBySlug('portfolio').then(setPage).catch(console.error)
+    const fetchPage = async () => {
+      try {
+        const pageData = await getPageBySlug('portfolio')
+        setPage(pageData)
+      } catch (e) {
+        console.error('Failed to fetch Portfolio page:', e)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchPage()
   }, [])
 
   const categories = ['all', ...new Set(portfolioItems.map(item => item.category))]
@@ -62,15 +73,19 @@ export default function Portfolio() {
 
   return (
     <div className="bg-white">
-  <ParallaxHero src={heroImage} alt={heroAlt} height={450}>
+      <ParallaxHero src={heroImage} alt={heroAlt} height={450}>
         <div className="text-center max-w-[60%] mx-auto">
-          {page?.customTitle && (
+          {!isLoading && page?.customTitle ? (
             <h1
               className="text-white text-4xl sm:text-5xl lg:text-5xl font-bold drop-shadow-md mb-4"
               dangerouslySetInnerHTML={{ __html: page.customTitle }}
             />
+          ) : (
+            <h1 className="text-white text-4xl sm:text-5xl lg:text-5xl font-bold drop-shadow-md mb-4">
+              Portfolio
+            </h1>
           )}
-          {page?.subtitle && (
+          {!isLoading && page?.subtitle && (
             <h2
               className="text-primary text-xl sm:text-2xl lg:text-3xl font-semibold drop-shadow-md"
               dangerouslySetInnerHTML={{ __html: page.subtitle }}

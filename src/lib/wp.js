@@ -2,7 +2,7 @@
 // Prefer env var, but fall back to the project's WP endpoint so deploys don't break if the var is missing
 const API_BASE =
   process.env.NEXT_PUBLIC_WP_API_URL ||
-  'https://work.tagagency.it/ventoadv/wp-json/wp/v2' // default for this project
+  'https://wp.ventoadv.it/wp-json/wp/v2' // default for this project
 const NO_STORE =
   String(process.env.NEXT_PUBLIC_NO_STORE || '').toLowerCase() === '1' ||
   String(process.env.NEXT_PUBLIC_NO_STORE || '').toLowerCase() === 'true'
