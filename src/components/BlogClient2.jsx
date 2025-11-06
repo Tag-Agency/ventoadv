@@ -34,16 +34,28 @@ export default function BlogClient2({ posts = [], categories = [] }) {
     return m
   }, [categories])
 
-  // Filter pills from WP categories
-  const filterCategories = useMemo(() => (
-    [{ label: 'Tutte', slug: 'all' }, ...categories.map(c => ({ label: c.name, slug: c.slug }))]
-  ), [categories])
+  // Filter pills from WP categories - show only "Tutte" and children of BLOG category
+  const filterCategories = useMemo(() => {
+    // Find BLOG category ID
+    const blogCategory = categories.find(c => c.slug === 'blog')
+    const blogCategoryId = blogCategory?.id
+    
+    // Filter only child categories of BLOG (and exclude BLOG itself)
+    const blogChildCategories = categories.filter(c => 
+      c.parent === blogCategoryId && c.slug !== 'blog'
+    )
+    
+    return [
+      { label: 'Tutte', slug: 'all' }, 
+      ...blogChildCategories.map(c => ({ label: c.name, slug: c.slug }))
+    ]
+  }, [categories])
 
   const filtered = useMemo(() => {
     const q = searchTerm.trim().toLowerCase()
     return posts.filter(p => {
       const matchesCategory = selectedCategory === 'all'
-        ? true
+        ? (p.categories || []).includes(catIdBySlug.get('blog')) // Show only BLOG category when "all" is selected
         : (p.categories || []).includes(catIdBySlug.get(selectedCategory))
       const matchesSearch = !q || p.title.toLowerCase().includes(q) || (p.excerpt || '').toLowerCase().includes(q)
       return matchesCategory && matchesSearch

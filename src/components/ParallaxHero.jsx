@@ -57,9 +57,11 @@ export default function ParallaxHero({
                   sizes="100vw"
                   className="object-cover"
                   priority
-                  quality={75}
+                  quality={60}
                   placeholder="blur"
                   blurDataURL={shimmerDataURL(1200, 500)}
+                  loading="eager"
+                  decoding="async"
                 />
               </div>
             ) : (
@@ -70,9 +72,11 @@ export default function ParallaxHero({
                 sizes="100vw"
                 className="object-cover"
                 priority
-                quality={75}
+                quality={60}
                 placeholder="blur"
                 blurDataURL={shimmerDataURL(1200, 500)}
+                loading="eager"
+                decoding="async"
               />
             )
           ) : (
@@ -80,7 +84,7 @@ export default function ParallaxHero({
           )}
         </motion.div>
         <div className={`absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent ${overlayClassName}`} />
-        <div className="absolute inset-0 flex items-center justify-center px-4">
+        <div className="absolute inset-0 flex items-center justify-center px-6 sm:px-4">
           {children}
         </div>
       </div>

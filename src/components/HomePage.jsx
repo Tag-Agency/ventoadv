@@ -108,7 +108,7 @@ export default function HomePage() {
               Web agency specializzata in soluzioni digitali innovative per aziende che vogliono 
               distinguersi nel mondo online.
             </p>
-            <div className="flex flex-row flex-wrap gap-3 justify-center">
+            <div className="flex flex-row gap-4 justify-center items-center">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -118,7 +118,7 @@ export default function HomePage() {
                   className="inline-flex items-center bg-primary hover:bg-[#b89638] text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg font-semibold gap-2 transition-colors whitespace-nowrap"
                 >
                   <Play className="w-5 h-5" />
-                  Inizia Progetto
+                  Contattaci
                 </Link>
               </motion.div>
 
@@ -130,7 +130,7 @@ export default function HomePage() {
                   href="/portfolio"
                   className="inline-flex items-center border-2 border-white text-white hover:bg-white hover:text-gray-900 px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg font-semibold transition-colors whitespace-nowrap"
                 >
-                  Scopri Portfolio
+                  Portfolio
                   <ChevronRight className="w-5 h-5 ml-2" />
                 </Link>
               </motion.div>
@@ -139,22 +139,25 @@ export default function HomePage() {
         </div>
         
         {/* Scroll down anchor link */}
-        <motion.a
-          href="#services"
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 text-white hover:text-primary transition-colors cursor-pointer"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.8 }}
-          whileHover={{ y: 5 }}
-        >
-          <span className="text-sm font-medium">Scorri</span>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex justify-center">
+          <motion.a
+            href="#services"
+            className="flex flex-col items-center gap-3 text-white hover:text-primary transition-colors cursor-pointer"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1, duration: 0.8 }}
+            whileHover={{ y: 5 }}
           >
-            <ChevronRight className="w-6 h-6 rotate-90" />
-          </motion.div>
-        </motion.a>
+            <span className="text-lg font-semibold text-center">Scorri</span>
+            <motion.div
+              className="flex items-center justify-center"
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <ChevronRight className="w-8 h-8 rotate-90" />
+            </motion.div>
+          </motion.a>
+        </div>
         
         {/* Elliptical shadow below hero */}
         <div 

@@ -3,7 +3,7 @@ import ParallaxHero from '@/components/ParallaxHero'
 import ContactForm from '@/components/ContactForm'
 import GutenbergContent from '@/components/GutenbergContent'
 
-export const revalidate = 60
+export const revalidate = 30
 
 export default async function Contatti() {
   let page = null
@@ -30,7 +30,7 @@ export default async function Contatti() {
   return (
     <div className="bg-white">
   <ParallaxHero src={heroImage} alt={heroAlt} height={450}>
-        <div className="text-center max-w-[60%] mx-auto">
+        <div className="text-center max-w-[95%] sm:max-w-[80%] lg:max-w-[60%] mx-auto">
           {page?.customTitle && (
             <h1
               className="text-white text-4xl sm:text-5xl lg:text-5xl font-bold drop-shadow-md mb-4"

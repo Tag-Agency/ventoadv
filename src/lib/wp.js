@@ -63,9 +63,12 @@ function stripHtml(html) {
 }
 
 export async function getCategories() {
-  const data = await fetchJSON('categories', { params: { per_page: 100 } })
+  const data = await fetchJSON('categories', { 
+    params: { per_page: 100 },
+    nextOptions: { revalidate: 10 } // Match blog page cache timing
+  })
   if (!data) return []
-  return data.map(c => ({ id: c.id, name: c.name, slug: c.slug }))
+  return data.map(c => ({ id: c.id, name: c.name, slug: c.slug, parent: c.parent }))
 }
 
 // Fetch global settings (colors etc.) from a dedicated WordPress page (by common slugs)
@@ -125,11 +128,14 @@ export async function getGlobalSettings() {
   return { primary, secondary, white }
 }
 
-export async function getPosts({ page = 1, perPage = 12, search = '', category = '', embed = true } = {}) {
+export async function getPosts({ page = 1, perPage = 12, search = '', category = '', embed = true, revalidate = 60 } = {}) {
   const params = { page, per_page: perPage, search }
   if (category) params.categories = category
   if (embed) params._embed = 'true'
-  const data = await fetchJSON('posts', { params })
+  const data = await fetchJSON('posts', { 
+    params, 
+    nextOptions: { revalidate } 
+  })
   if (!data) return []
   return data.map(p => ({
     id: p.id,
@@ -180,10 +186,13 @@ export async function getPostBySlug(slug) {
   }
 }
 
-export async function getPageBySlug(slug) {
+export async function getPageBySlug(slug, revalidate = 30) {
   if (!slug) return null
   const params = { slug, _embed: 'true' }
-  const data = await fetchJSON('pages', { params })
+  const data = await fetchJSON('pages', { 
+    params, 
+    nextOptions: { revalidate } 
+  })
   if (!data || !Array.isArray(data) || data.length === 0) return null
   const item = data[0]
   
@@ -416,5 +425,88 @@ export async function getPageBySlug(slug) {
     content: item.content?.rendered || '',
     image: featuredImage,
     imageAlt: featuredImageAlt || null,
+    acf: item.acf || null,
+  }
+}
+
+// Footer data from chi-siamo page ACF fields
+export async function getFooterData() {
+  try {
+    const page = await getPageBySlug('chi-siamo', 30) // Cache for 30 seconds
+    if (!page || !page.acf) {
+      return {
+        ctaData: {
+          backgroundImage: '',
+          title: '',
+          buttonText: 'Contattaci Ora',
+          buttonLink: '/contatti'
+        },
+        contactData: {
+          email: '',
+          phone: '',
+          address: ''
+        }
+      }
+    }
+
+    const acf = page.acf
+
+    // Get background image URL - prioritize legacy background field, then hero group
+    let backgroundImageUrl = ''
+    const heroGroup = acf.hero || null
+    const backgroundValue = acf.background || heroGroup?.hero_image || heroGroup?.background
+    
+    if (backgroundValue) {
+      if (typeof backgroundValue === 'number') {
+        // It's a media ID, try to resolve to URL
+        try {
+          const attachmentUrl = `${API_BASE.replace('/wp-json/wp/v2', '')}/wp-json/wp/v2/media/${backgroundValue}?context=view`
+          const res = await fetch(attachmentUrl, NO_STORE ? { headers: { 'Accept': 'application/json' }, cache: 'no-store' } : { headers: { 'Accept': 'application/json' }, next: { revalidate: 30 } })
+          if (res.ok) {
+            const mediaData = await res.json()
+            backgroundImageUrl = mediaData?.source_url || mediaData?.guid?.rendered || ''
+          }
+        } catch (e) {
+          console.log('Could not fetch footer background image:', e.message)
+        }
+      } else if (typeof backgroundValue === 'string') {
+        if (/^https?:\/\//.test(backgroundValue) || backgroundValue.startsWith('/')) {
+          backgroundImageUrl = backgroundValue
+        }
+      } else if (backgroundValue && typeof backgroundValue === 'object') {
+        backgroundImageUrl = backgroundValue.url || backgroundValue.source_url || ''
+      }
+    }
+
+
+
+    return {
+      ctaData: {
+        backgroundImage: backgroundImageUrl,
+        title: acf.call_to_action || '',
+        buttonText: 'Contattaci Ora',
+        buttonLink: acf.bottone_cta || '/contatti'
+      },
+      contactData: {
+        email: acf.email || '',
+        phone: acf.telefono || '',
+        address: acf.indirizzo || ''
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching footer data:', error)
+    return {
+      ctaData: {
+        backgroundImage: '',
+        title: '',
+        buttonText: 'Contattaci Ora',
+        buttonLink: '/contatti'
+      },
+      contactData: {
+        email: '',
+        phone: '',
+        address: ''
+      }
+    }
   }
 }

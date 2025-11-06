@@ -6,7 +6,7 @@ import BlogCarousel from '@/components/BlogCarousel'
 import { getPostBySlug, getPosts, getCategories } from '@/lib/wp'
 import { formatDateIT } from '@/lib/date'
 
-export const revalidate = 60
+export const revalidate = 30
 
 export default async function BlogPost({ params }) {
   const { category: categorySlug, slug } = params
@@ -48,7 +48,7 @@ export default async function BlogPost({ params }) {
     <div className="bg-white">
       {post.image && (
         <ParallaxHero src={post.image} alt={post.title} height={350}>
-          <div className="max-w-[60%] mx-auto">
+          <div className="max-w-[95%] sm:max-w-[80%] lg:max-w-[60%] mx-auto">
             <h1
               className="text-white text-4xl sm:text-5xl lg:text-5xl font-bold text-center drop-shadow-md"
               dangerouslySetInnerHTML={{ __html: post.title }}

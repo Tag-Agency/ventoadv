@@ -4,7 +4,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Menu, X, ChevronDown } from 'lucide-react'
+import { Menu, X, ChevronDown, MessageCircle } from 'lucide-react'
 import { motion, LazyMotion, domAnimation } from 'framer-motion'
 
 const services = [
@@ -140,9 +140,10 @@ export default function Navigation() {
               <Link 
                 href="/contatti"
                 prefetch={true}
-                className="bg-primary hover:bg-[#b89638] text-white px-4 py-2 rounded-full font-semibold text-sm transition-colors"
+                className="bg-primary hover:bg-[#b89638] text-white p-3 rounded-full transition-colors"
+                aria-label="Contattaci"
               >
-                CONTATTACI
+                <MessageCircle className="w-5 h-5" />
               </Link>
             </div>
           </div>
