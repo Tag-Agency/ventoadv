@@ -1,4 +1,4 @@
-import { Inter, Poppins } from 'next/font/google'
+import { Inter, Poppins, Outfit } from 'next/font/google'
 import './globals.css'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
@@ -10,6 +10,10 @@ const poppins = Poppins({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700', '800'],
   variable: '--font-poppins',
+})
+const outfit = Outfit({
+  subsets: ['latin'],
+  variable: '--font-outfit',
 })
 
 export const metadata = {
@@ -49,7 +53,7 @@ export default async function RootLayout({ children }) {
         <link rel="preconnect" href="https://wp.ventoadv.it/wp-content" crossOrigin="" />
         <link rel="dns-prefetch" href="//wp.ventoadv.it/wp-content" />
       </head>
-      <body className={`${inter.className} ${poppins.variable}`} style={cssVars}>
+      <body className={`${inter.className} ${poppins.variable} ${outfit.variable}`} style={cssVars}>
         <Navigation />
         <main className="pt-0">{/* header overlay: no extra top padding */}
           {children}

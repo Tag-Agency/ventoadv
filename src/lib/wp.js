@@ -11,6 +11,8 @@ const NO_STORE =
 const BASIC_USER = process.env.WP_BASIC_AUTH_USER || process.env.BASIC_AUTH_USER
 const BASIC_PASS = process.env.WP_BASIC_AUTH_PASS || process.env.BASIC_AUTH_PASS
 const IS_SERVER = typeof window === 'undefined'
+export const WP_API_BASE = API_BASE
+
 function authHeaders() {
   if (!IS_SERVER) return {}
   if (!BASIC_USER || !BASIC_PASS) return {}
@@ -22,7 +24,7 @@ function authHeaders() {
   }
 }
 
-async function fetchJSON(endpoint, { nextOptions, params } = {}) {
+async function fetchJSON(endpoint, { nextOptions, params, noStore = false } = {}) {
   if (!API_BASE) return null
   const url = new URL(endpoint, API_BASE.endsWith('/') ? API_BASE : API_BASE + '/')
   if (params) {
@@ -30,8 +32,9 @@ async function fetchJSON(endpoint, { nextOptions, params } = {}) {
       if (v !== undefined && v !== null && v !== '') url.searchParams.set(k, String(v))
     })
   }
-  const baseOptions = { headers: { 'Accept': 'application/json' } }
-  const cacheOptions = NO_STORE
+  const baseOptions = { headers: { Accept: 'application/json', ...authHeaders() } }
+  const useNoStore = NO_STORE || noStore
+  const cacheOptions = useNoStore
     ? { cache: 'no-store' }
     : { next: { revalidate: 60, ...(nextOptions || {}) } }
   
@@ -49,6 +52,31 @@ async function fetchJSON(endpoint, { nextOptions, params } = {}) {
   } catch (error) {
     console.warn(`WP fetch error for ${url.toString()}:`, error.message)
     return null
+  }
+}
+
+export function getWpApiBase() {
+  return API_BASE
+}
+
+export async function wpHealthCheck() {
+  const target = getWpApiBase()
+  if (!target) return { ok: false, error: 'Missing WordPress API base' }
+  const started = Date.now()
+  const data = await fetchJSON('posts', {
+    params: { per_page: 1 },
+    noStore: true,
+  })
+  if (!data || !Array.isArray(data)) {
+    return { ok: false, target, latencyMs: Date.now() - started }
+  }
+  return {
+    ok: true,
+    target,
+    latencyMs: Date.now() - started,
+    sample: data[0]
+      ? { id: data[0].id, slug: data[0].slug, date: data[0].date }
+      : null,
   }
 }
 

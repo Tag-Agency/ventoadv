@@ -13,6 +13,9 @@ module.exports = {
         secondary: 'rgb(var(--color-secondary) / <alpha-value>)',
         white: 'rgb(var(--color-white) / <alpha-value>)',
       },
+      fontFamily: {
+        product: ['var(--font-outfit)', 'sans-serif'],
+      },
     },
   },
   plugins: [],

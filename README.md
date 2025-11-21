@@ -35,6 +35,11 @@ These helpers use `fetch` with `revalidate: 60` by default.
 - If `NEXT_PUBLIC_WP_API_URL` is not set, the blog page falls back to a placeholder post.
 - Dates are formatted using Italian locale (`it-IT`) to avoid hydration issues.
 
+## Verifica integrazione WordPress
+
+- Esegui `npm run wp:check` per verificare dal terminale la raggiungibilità dell'endpoint configurato (usa `.env.local` o il fallback `https://wp.ventoadv.it/wp-json/wp/v2`).
+- Con l'app in esecuzione puoi interrogare `/api/wp-health` per ottenere uno stato JSON con endpoint target, latenza e un post di esempio.
+
 ## Deploy on Vercel
 
 1) In Vercel → Project → Settings → Environment Variables, set:

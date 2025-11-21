@@ -1,12 +1,12 @@
 import { getPageBySlug } from '@/lib/wp'
-import HomeClient from '@/components/HomeClient'
+import HomeAltClient from './HomeAltClient'
 
 export const metadata = {
 	title: 'Home Alt | VentoADV',
 	description: 'Web agency specializzata in soluzioni digitali innovative.',
 }
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export default async function HomeAltPage() {
 	// Fetch 'home-page' data
@@ -25,5 +25,5 @@ export default async function HomeAltPage() {
 		}
 	}
 
-	return <HomeClient data={pageData} />
+	return <HomeAltClient data={pageData} />
 }

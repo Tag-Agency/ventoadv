@@ -71,8 +71,78 @@
 	.animate-blob-slow, .animate-blob-fast { animation: none !important; }
 }
 
-	/* Headings: Poppins uppercase globally */
+/* Headings: Poppins uppercase globally */
 	h1, h2 {
 		font-family: var(--font-poppins), ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-		text-transform: uppercase;
 	}
+
+/* Dynamic gradient animations for hero background */
+@keyframes gradient-x {
+	0%, 100% { background-position: 0% 50%; }
+	50% { background-position: 100% 50%; }
+}
+
+@keyframes gradient-y {
+	0%, 100% { background-position: 50% 0%; }
+	50% { background-position: 50% 100%; }
+}
+
+@keyframes gradient-xy {
+	0%, 100% { background-position: 0% 0%; }
+	25% { background-position: 100% 0%; }
+	50% { background-position: 100% 100%; }
+	75% { background-position: 0% 100%; }
+}
+
+@keyframes float-1 {
+	0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+	50% { transform: translateY(-20px) translateX(10px) scale(1.05); }
+}
+
+@keyframes float-2 {
+	0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+	50% { transform: translateY(15px) translateX(-15px) scale(1.1); }
+}
+
+@keyframes float-3 {
+	0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+	50% { transform: translateY(-25px) translateX(20px) scale(1.08); }
+}
+
+@keyframes float-4 {
+	0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+	50% { transform: translateY(10px) translateX(-10px) scale(0.95); }
+}
+
+@keyframes float-5 {
+	0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+	50% { transform: translateY(-15px) translateX(5px) scale(1.03); }
+}
+
+.animate-gradient-x {
+	background-size: 200% 200%;
+	animation: gradient-x 15s ease infinite;
+}
+
+.animate-gradient-y {
+	background-size: 200% 200%;
+	animation: gradient-y 12s ease infinite;
+}
+
+.animate-gradient-xy {
+	background-size: 300% 300%;
+	animation: gradient-xy 20s ease infinite;
+}
+
+.animate-float-1 { animation: float-1 8s ease-in-out infinite; }
+.animate-float-2 { animation: float-2 10s ease-in-out infinite; }
+.animate-float-3 { animation: float-3 12s ease-in-out infinite; }
+.animate-float-4 { animation: float-4 9s ease-in-out infinite; }
+.animate-float-5 { animation: float-5 11s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+	.animate-gradient-x, .animate-gradient-y, .animate-gradient-xy,
+	.animate-float-1, .animate-float-2, .animate-float-3, .animate-float-4, .animate-float-5 {
+		animation: none !important;
+	}
+}
